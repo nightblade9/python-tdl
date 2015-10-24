@@ -116,7 +116,7 @@ def _format_char(char):
 _utf32_codec = {'little': 'utf-32le', 'big': 'utf-32le'}[_sys.byteorder]
     
 def _format_str(string):
-    if isinstance(string, str):
+    if isinstance(string, (str, unicode)):
         array = _array.array('I')
         if _IS_PYTHON3:
             array.frombytes(string.encode(_utf32_codec))
