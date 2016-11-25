@@ -9,14 +9,15 @@
     U{here<http://doryen.eptalys.net/data/libtcod/doc/1.5.1/html2/noise.html>}.
 """
 
+from __future__ import absolute_import as _
 
 import random as _random
 
 from tcod import ffi as _ffi
 from tcod import lib as _lib
 
-import tdl as _tdl
-from . import style as _style
+import tdl
+import tdl.style
 
 _MERSENNE_TWISTER = 1
 _CARRY_WITH_MULTIPLY = 2
@@ -102,17 +103,17 @@ class Noise(object):
                      If None is used then a random seed will be generated.
         """
         if algorithm.upper() not in _NOISE_TYPES:
-            raise _tdl.TDLError('No such noise algorithm as %s' % algorithm)
+            raise tdl.Error('No such noise algorithm as %s' % algorithm)
         self._algorithm = algorithm.upper()
 
         if mode.upper() not in _NOISE_MODES:
-            raise _tdl.TDLError('No such mode as %s' % mode)
+            raise tdl.Error('No such mode as %s' % mode)
         self._mode = mode.upper()
 
         if seed is None:
             seed = _random.getrandbits(32)
         else:
-            seed = hash(seed)
+            seed = hash(seed) % (2 ** 32) # must be uint32
         self._seed = seed
         # convert values into ctypes to speed up later functions
         self._dimensions = min(_MAX_DIMENSIONS, int(dimensions))
@@ -172,6 +173,7 @@ class Noise(object):
             _lib.TCOD_noise_delete(self._noise)
             self._noise = None
 
-__all__ = [_var for _var in locals().keys() if _var[0] != '_']
+Noise.getPoint = tdl.style.backport(Noise.get_point)
 
-Noise.getPoint = _style.backport(Noise.get_point)
+__all__ = [_var for _var in locals().keys() if _var[0] != '_']
+__all__.remove('tdl')

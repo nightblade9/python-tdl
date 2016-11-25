@@ -3,8 +3,8 @@
     compatibility.
 """
 
-import warnings as _warnings
-import functools as _functools
+import functools
+import warnings
 
 def backport(func):
     """
@@ -20,9 +20,9 @@ def backport(func):
     if not __debug__:
         return func
 
-    @_functools.wraps(func)
+    @functools.wraps(func)
     def deprecated_function(*args, **kargs):
-        _warnings.warn('This function name is deprecated',
+        warnings.warn('This function name is deprecated',
                        DeprecationWarning, 2)
         return func(*args, **kargs)
     deprecated_function.__doc__ = """

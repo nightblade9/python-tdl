@@ -37,7 +37,7 @@ from tcod import ffi as _ffi
 from tcod import lib as _lib
 
 import tdl as _tdl
-from . import style as _style
+import tdl.style
 
 _eventQueue = []
 _pushedEvents = []
@@ -482,8 +482,8 @@ def is_window_closed():
 
 __all__ = [_var for _var in locals().keys() if _var[0] != '_']
 
-App.runOnce = _style.backport(App.run_once)
-keyWait = _style.backport(key_wait)
-setKeyRepeat = _style.backport(set_key_repeat)
-isWindowClosed = _style.backport(is_window_closed)
+App.runOnce = tdl.style.backport(App.run_once)
+keyWait = tdl.style.backport(key_wait)
+setKeyRepeat = tdl.style.backport(set_key_repeat)
+isWindowClosed = tdl.style.backport(is_window_closed)
 

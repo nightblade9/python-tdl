@@ -3,14 +3,16 @@
 
 """
 
+from __future__ import absolute_import as _
+
 import itertools as _itertools
 import math as _math
 
 from tcod import ffi as _ffi
 from tcod import lib as _lib
 
-import tdl as _tdl
-from . import style as _style
+import tdl
+import tdl.style
 
 _FOVTYPES = {'BASIC' : 0, 'DIAMOND': 1, 'SHADOW': 2, 'RESTRICTIVE': 12, 'PERMISSIVE': 11}
 
@@ -22,7 +24,7 @@ def _get_fov_type(fov):
         return _FOVTYPES[fov]
     if fov[:10] == 'PERMISSIVE' and fov[10].isdigit() and fov[10] != '9':
         return 4 + int(fov[10])
-    raise _tdl.TDLError('No such fov option as %s' % oldFOV)
+    raise tdl.Error('No such fov option as %s' % oldFOV)
 
 class Map(object):
     """Fast field-of-view and path-finding on stored data.
@@ -414,8 +416,7 @@ def bresenham(x1, y1, x2, y2):
         points.reverse()
     return points
 
+quickFOV = tdl.style.backport(quick_fov)
+AStar.getPath = tdl.style.backport(AStar.get_path)
 
 __all__ = [_var for _var in locals().keys() if _var[0] != '_']
-
-quickFOV = _style.backport(quick_fov)
-AStar.getPath = _style.backport(AStar.get_path)
